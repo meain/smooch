@@ -1,4 +1,4 @@
-# Smooch [WIP]
+# Synapse [WIP]
 
 A super simple way to convert your python function into a rest api.
 
@@ -24,9 +24,9 @@ A super simple way to convert your python function into a rest api.
 ## Result
 
 ```python
-import smooch
+import synapse
 
-@smooch
+@synapse
 def infer(input=None): # will be available at /infer
     result = work_on(input)
     return result

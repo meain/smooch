@@ -14,9 +14,10 @@ A super simple way to convert your python function into a rest api.
 
 ## Deps
 
-- flask ( or sanic? )
+- `flask`
+- `flask_cors`
 
-## Result
+## Sample usage
 
 ```python
 from synapse import Synapse
@@ -32,3 +33,40 @@ def robo(name, robot=False):
 
 synapse.start()
 ```
+
+### Ideal condition
+For this if you send
+```bash
+curl --header "Content-Type: application/json" \
+  --request POST \
+  --data '{"name": "meain", "robot": true}' \
+  http://localhost:8080/robo
+```
+you get
+```js
+{
+  "data": "meain is a robot",
+  "success": true
+}
+```
+
+### Error condition
+
+It has basic error check for now. So if you send
+```bash
+curl --header "Content-Type: application/json" \
+  --request POST \
+  --data '{"nxame": "meain"}' \
+  http://localhost:8080/robo
+```
+
+you get
+```js
+{
+  "error": "Keys ['name'] not found",
+  "success": false
+}
+```
+
+## TODO
+> For TODO check `todo/`

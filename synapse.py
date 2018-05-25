@@ -41,7 +41,7 @@ class Synapse(object):
                 response = fn(**request.json)
                 return jsonify({
                     "success": True,
-                    "error": response,
+                    "data": response,
                 })
 
             return self.app.add_url_rule(

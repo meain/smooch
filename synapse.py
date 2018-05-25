@@ -1,14 +1,16 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 from functools import wraps
 import inspect
 
-# CORS is optional?
 
 
 class Synapse(object):
-    def __init__(self):
+    def __init__(self, CORS=False):
         self.__name__ = 'synapse'
         self.app = Flask(__name__)
+        if CORS:
+            CORS(self.app)
 
     def _validate_user(self, headers, data):
         pass
@@ -28,14 +30,11 @@ class Synapse(object):
         def flask_wrapper_outer(fn, *args):
             @wraps(fn)
             def flask_wrapper_inner(*args, **kwargs):
-                # print(endpoint, fn.__name__, inspect.getargspec(fn))
                 valid, non_keys = self._validate_input(
                     request.json,
                     inspect.getargspec(fn).args,
                     inspect.getargspec(fn).defaults)
-                # print(valid)
                 if not valid:
-                    # print(f"Keys {str(non_keys)} not found")
                     return jsonify({
                         "success": False,
                         "error": f"Keys {str(non_keys)} not found"

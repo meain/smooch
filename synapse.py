@@ -5,10 +5,10 @@ import inspect
 
 
 class Synapse(object):
-    def __init__(self, CORS=False):
+    def __init__(self, cors=False):
         self.__name__ = 'synapse'
         self.app = Flask(__name__)
-        if CORS:
+        if cors:
             CORS(self.app)
 
     def _validate_user(self, headers, data):
@@ -16,7 +16,10 @@ class Synapse(object):
 
     def _validate_input(self, data, args, defaults):
         non_keys = []
-        args = args[:len(defaults)]  # remove kwargs
+        length = len(args)
+        if defaults is not None:
+            length = len(args) - len(defaults)
+        args = args[:length]  # remove kwargs
         for key in list(args):
             if key not in data:
                 non_keys.append(key)

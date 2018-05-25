@@ -4,7 +4,6 @@ from functools import wraps
 import inspect
 
 
-
 class Synapse(object):
     def __init__(self, CORS=False):
         self.__name__ = 'synapse'
@@ -44,6 +43,7 @@ class Synapse(object):
                     "success": True,
                     "error": response,
                 })
+
             return self.app.add_url_rule(
                 endpoint, view_func=flask_wrapper_inner, methods=methods)
 

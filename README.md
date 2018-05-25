@@ -1,17 +1,10 @@
-# Synapse [WIP]
+# Synapse
 
 A super simple way to convert your python function into a rest api.
 
 **Falsk with better defaults**
 
-> Not sure if this needed though. Might be micro optimizing
-
-## Why
-
-- auth
-- check for needed keys ( give correct error message back )
-- use function name as path
-
+> Not sure if this needed though. Might be micro optimizing. Most probably
 
 ## Model
 
@@ -26,10 +19,16 @@ A super simple way to convert your python function into a rest api.
 ## Result
 
 ```python
-import synapse
+from synapse import Synapse
 
-@synapse
-def infer(input=None): # will be available at /infer
-    result = work_on(input)
-    return result
+synapse = Synapse()
+
+@synapse.connect('/robo')
+def robo(name, robot=False):
+    if robot:
+        return f"{name} is a robot"
+    else:
+        return f"{name} is not a robot"
+
+synapse.start()
 ```

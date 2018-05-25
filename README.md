@@ -2,6 +2,8 @@
 
 A super simple way to convert your python function into a rest api.
 
+**Falsk with better defaults**
+
 > Not sure if this needed though. Might be micro optimizing
 
 ## Why

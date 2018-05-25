@@ -1,24 +1,54 @@
-from flask import Flask
+from flask import Flask, request, jsonify
 from functools import wraps
+import inspect
+
 # CORS is optional?
+
 
 class Synapse(object):
     def __init__(self):
         self.__name__ = 'synapse'
         self.app = Flask(__name__)
 
-    def connect(self, endpoint):
-        def flask_wrapper_outer(fn):
+    def _validate_user(self, headers, data):
+        pass
+
+    def _validate_input(self, data, args, defaults):
+        non_keys = []
+        args = args[:len(defaults)]  # remove kwargs
+        for key in list(args):
+            if key not in data:
+                non_keys.append(key)
+        if len(non_keys) == 0:
+            return True, []
+        else:
+            return False, non_keys
+
+    def connect(self, endpoint, methods=['GET', 'POST']):
+        def flask_wrapper_outer(fn, *args):
             @wraps(fn)
-            @self.app.route(endpoint)
             def flask_wrapper_inner(*args, **kwargs):
-                print (endpoint, fn.__name__, args, kwargs)
-                response = fn('hai')  # send verified resp
-                # print ( response )
-                return response
-            return flask_wrapper_inner
+                # print(endpoint, fn.__name__, inspect.getargspec(fn))
+                valid, non_keys = self._validate_input(
+                    request.json,
+                    inspect.getargspec(fn).args,
+                    inspect.getargspec(fn).defaults)
+                # print(valid)
+                if not valid:
+                    # print(f"Keys {str(non_keys)} not found")
+                    return jsonify({
+                        "success": False,
+                        "error": f"Keys {str(non_keys)} not found"
+                    })
+                response = fn(**request.json)
+                return jsonify({
+                    "success": True,
+                    "error": response,
+                })
+            return self.app.add_url_rule(
+                endpoint, view_func=flask_wrapper_inner, methods=methods)
+
         return flask_wrapper_outer
 
     def start(self, url='0.0.0.0', port=8080, **kwargs):
         self.app.run(host=url, port=port, **kwargs)
-

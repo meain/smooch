@@ -1,5 +1,3 @@
-# falsk with better defaults as a wrapper
-
 from synapse import Synapse
 
 synapse = Synapse()
@@ -13,8 +11,12 @@ def robo(name, robot=False):
         return f"{name} is not a robot"
 
 
-# @synapse.connect('/ok')
-# def ok(okn):
-#     return ( f"{okn}" )
+@synapse.connect('/ok')
+def ok(okn):
+    return ( f"{okn}" )
 
-synapse.start()
+# robo('meain')
+
+synapse.start(debug=True)
+# synapse.start()
+

@@ -52,5 +52,5 @@ class Synapse(object):
 
         return flask_wrapper_outer
 
-    def start(self, url='0.0.0.0', port=8080, **kwargs):
-        self.app.run(host=url, port=port, **kwargs)
+    def start(self, **kwargs):
+        self.app.run( **kwargs)
